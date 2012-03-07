@@ -1,0 +1,14 @@
+syntax: glob
+*.svn/
+*.class
+*.o
+*.obj
+*.*~
+*.~
+*.pyc
+*.pyo
+*.swp
+*.lo
+*.so
+*.a
+*.la
