@@ -2,11 +2,14 @@ package com.alibaba.qa.diffcoverage.parser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.regexp.RE;
 import org.openide.filesystems.FileUtil;
+
+import com.google.common.collect.Lists;
 
 /**
  * 实现由gcc编译得到C/C++目标文件的解析
@@ -62,33 +65,36 @@ public class GccObjectFileParser implements IObjectFileParser {
 			return null;
 		}
 
-		String sourceFilename = null;
 		String[] fields = content.split("\\x00");
+		List<String> sourceFilenames = Lists.newArrayList();
 		for (String field : fields) {
 			field = removeInvalidCharacters(field);
 			if (field.endsWith(".cc") || (field.endsWith(".cpp"))
 			        || (field.endsWith(".c"))) {
-				sourceFilename = field;
-				break;
+				sourceFilenames.add(field);
 			}
 		}
-		if (sourceFilename == null) {
-			logger.debug(String.format(
-		        "Can not parse source filename from object file: %s", objectFile));
-			return null;
+		if (sourceFilenames.size() <= 0) {
+		    logger.debug(String.format(
+		        "Can not parse source filename from object file: %s", 
+		        objectFile));
+		    return null;
 		}
-		for (String field : fields) {
-			field = removeInvalidCharacters(field);
-			if (!field.startsWith(basePath.toString()))
-				continue;
-			File file = new File(field);
-			if (!file.exists())
-				continue;
-			file = new File(file, sourceFilename);
-			if (!file.exists())
-				continue;
-			file = FileUtil.normalizeFile(file);
-			return file.getAbsolutePath();
+		
+		for (String sourceFilename: sourceFilenames) {
+    		for (String field : fields) {
+    			field = removeInvalidCharacters(field);
+    			if (!field.startsWith(basePath.toString()))
+    				continue;
+    			File file = new File(field);
+    			if (!file.exists())
+    				continue;
+    			file = new File(file, sourceFilename);
+    			if (!file.exists())
+    				continue;
+    			file = FileUtil.normalizeFile(file);
+    			return file.getAbsolutePath();
+    		}
 		}
 		return null;
 	}

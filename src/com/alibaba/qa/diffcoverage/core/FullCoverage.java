@@ -37,9 +37,9 @@ public class FullCoverage extends AbstractCoverage {
             if (configProperty.isAllFile())
                 zeroFiles.add(sourceFile);
             else
-                logger.error(
-                    String.format("Can not parse data file from %s, you should compile it with \"-ftest-coverage -fprofile-arcs\" options", 
-                        objectFile));
+                logger.error(String.format(
+                    "Can not parse data file from %s, you should compile it with \"-ftest-coverage -fprofile-arcs\" options", 
+                    objectFile));
             return null;
         }
         // TODO 2012-01-09 garcia.wul 如果某一个文件一行代码都没有被覆盖到,则数据文件将不会被生成
