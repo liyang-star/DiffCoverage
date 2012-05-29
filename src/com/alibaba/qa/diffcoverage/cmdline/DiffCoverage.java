@@ -159,6 +159,7 @@ public class DiffCoverage {
             thread.start();
         for (Thread thread: threads)
             thread.join();
+        System.out.println("XXXXXXXXXXXXXXXXXXXXX");
         
         // 增加对头文件覆盖率信息的统计
 //        for (Entry<String, SourceFile> entry: 

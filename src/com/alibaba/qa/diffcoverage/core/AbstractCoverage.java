@@ -191,14 +191,16 @@ public abstract class AbstractCoverage implements ICoverage {
     	String filename = file.getName();
     	String parent = FileUtil.normalizePath(file.getParent());
     	for (String pattern: configProperty.getIgnorePattern().getIngoreFiles()) {
+    	    System.out.println(pattern);
     		Pattern re = Pattern.compile(pattern);
     		Matcher matcher = re.matcher(filename);
+    		System.out.println(matcher.find());
     		if (matcher.find())
     			return true;
     	}
     	for (String pattern: configProperty.getIgnorePattern().getIgnoreDirs()) {
             Pattern re = Pattern.compile(pattern);
-            Matcher matcher = re.matcher(filename);
+            Matcher matcher = re.matcher(parent);
             if (matcher.find())
                 return true;
     	}

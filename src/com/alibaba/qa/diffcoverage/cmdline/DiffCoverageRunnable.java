@@ -27,14 +27,15 @@ public class DiffCoverageRunnable implements Runnable{
     public void run(){
         while (!objectFiles.isEmpty()) {
             String objectFile = objectFiles.remove();
+            System.out.println(objectFile);
             CompilationUnit compilationUnit = coverage.findCompilationUnit(
                 commandLineParser.getProjectPath().getAbsolutePath(), objectFile);
             if (compilationUnit == null)
-                return;
+                continue;
             FileProperty fileProperty = coverage.analyseCoverageFiles(
                 commandLineParser.getProjectPath().getAbsolutePath(), compilationUnit);
             if (fileProperty == null)
-                return;
+                continue;
             fileProperties.add(fileProperty);
         }
     }
