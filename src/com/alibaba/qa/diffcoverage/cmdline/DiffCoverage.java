@@ -3,13 +3,11 @@ package com.alibaba.qa.diffcoverage.cmdline;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Queue;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.eclipse.linuxtools.gcov.parser.SourceFile;
 import org.ho.yaml.Yaml;
 import org.kohsuke.args4j.CmdLineException;
 import org.openide.filesystems.FileUtil;
@@ -18,7 +16,6 @@ import com.alibaba.qa.diffcoverage.core.FullCoverage;
 import com.alibaba.qa.diffcoverage.core.ICoverage;
 import com.alibaba.qa.diffcoverage.core.UpgradeCoverage;
 import com.alibaba.qa.diffcoverage.model.ASTFileLocation;
-import com.alibaba.qa.diffcoverage.model.CompilationUnit;
 import com.alibaba.qa.diffcoverage.model.ConfigProperty;
 import com.alibaba.qa.diffcoverage.model.FileProperty;
 import com.alibaba.qa.diffcoverage.model.IgnorePattern;
@@ -84,6 +81,20 @@ public class DiffCoverage {
         	try{
         	    configProperty.setIgnorePattern(
         	        Yaml.loadType(fileInputStream, IgnorePattern.class));
+        	    if (configProperty.getIgnorePattern().getIgnoreFiles().size() > 0) {
+            	    logger.info(String.format("Ignore File Patterns: "));
+            	    for (String pattern :
+            	        configProperty.getIgnorePattern().getIgnoreFiles()) {
+            	        logger.info(String.format("\t- %s", pattern));
+            	    }
+        	    }
+        	    if (configProperty.getIgnorePattern().getIgnoreDirs().size() > 0) {
+        	        logger.info(String.format("Ignore Dir Patterns: "));
+        	        for (String pattern: 
+        	            configProperty.getIgnorePattern().getIgnoreDirs()) {
+        	            logger.info(String.format("\t- %s", pattern));
+        	        }
+        	    }
             }catch (Exception e){
                 logger.error(String.format("The format of %s is not correct", 
                     commandLineParser.getIgnoreFile()));
@@ -141,6 +152,7 @@ public class DiffCoverage {
         
         
         // 查找所有的目标文件
+        logger.info(String.format("Start analysing all object files"));
         Queue<String> objectFiles = coverage.findObjectFiles(
             commandLineParser.getProjectPath().getAbsolutePath());
         if ((objectFiles == null) || (objectFiles.size() <= 0)) {
@@ -159,7 +171,7 @@ public class DiffCoverage {
             thread.start();
         for (Thread thread: threads)
             thread.join();
-        System.out.println("XXXXXXXXXXXXXXXXXXXXX");
+            logger.info(String.format("Finish to analysed all object files"));
         
         // 增加对头文件覆盖率信息的统计
 //        for (Entry<String, SourceFile> entry: 

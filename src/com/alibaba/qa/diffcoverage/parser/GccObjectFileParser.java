@@ -69,17 +69,20 @@ public class GccObjectFileParser implements IObjectFileParser {
 
 		String[] fields = content.split("\\x00");
 		List<String> sourceFilenames = Lists.newArrayList();
+		
+		// TODO 2012-05-29 garcia.wul 
+		// 目前只能支持以*.c/*.cc/*.cpp/*.cxx结尾的文件
 		for (String field : fields) {
 			field = removeInvalidCharacters(field);
-			if (field.endsWith(".cc") || (field.endsWith(".cpp"))
-			        || (field.endsWith(".c"))) {
+			if (field.endsWith(".cc") || 
+			    field.endsWith(".cpp") || 
+			    field.endsWith(".c") ||
+			    field.endsWith(".cxx")) {
 				sourceFilenames.add(field);
 			}
 		}
 		if (sourceFilenames.size() <= 0) {
-		    logger.debug(String.format(
-		        "Can not parse source filename from object file: %s", 
-		        objectFile));
+		    logger.debug(String.format("Can not parse %s's source file", objectFile));
 		    return null;
 		}
 		

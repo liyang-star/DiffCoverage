@@ -3,15 +3,21 @@ package com.alibaba.qa.diffcoverage.cmdline;
 import java.util.List;
 import java.util.Queue;
 
+import org.apache.log4j.Logger;
+
 import com.alibaba.qa.diffcoverage.core.ICoverage;
 import com.alibaba.qa.diffcoverage.model.CompilationUnit;
 import com.alibaba.qa.diffcoverage.model.FileProperty;
 
-public class DiffCoverageRunnable implements Runnable{
+public class DiffCoverageRunnable implements Runnable {
+    private long timestamp = System.currentTimeMillis();
+    
     private List<FileProperty> fileProperties = null;
     private Queue<String> objectFiles = null;
     private ICoverage coverage = null;
     private CommandLineParser commandLineParser = null;
+    
+    private Logger logger = Logger.getRootLogger();
     
     public DiffCoverageRunnable(Queue<String> objectFiles, 
         ICoverage coverage,
@@ -27,7 +33,8 @@ public class DiffCoverageRunnable implements Runnable{
     public void run(){
         while (!objectFiles.isEmpty()) {
             String objectFile = objectFiles.remove();
-            System.out.println(objectFile);
+            logger.info(String.format("Analysing [%s] compilation unit, %s", 
+                objectFile, timestamp));
             CompilationUnit compilationUnit = coverage.findCompilationUnit(
                 commandLineParser.getProjectPath().getAbsolutePath(), objectFile);
             if (compilationUnit == null)

@@ -93,8 +93,11 @@ public abstract class AbstractCoverage implements ICoverage {
             if (file.isDirectory())
                 files.addAll(findObjectFiles(FileUtil.normalizePath(file.getAbsolutePath())));
             else if ((getFileMimeType(file).contains("application/octet-stream")) &&
-                ((file.toString().endsWith(".o") || file.toString().endsWith(".obj"))))
+                ((file.toString().endsWith(".o") || file.toString().endsWith(".obj")))) {
+                if (!FileUtil.normalizeFile(file.getAbsoluteFile()).exists())
+                    continue;
                 files.add(FileUtil.normalizePath(file.getAbsolutePath()));
+            }
         }
         return files;
     }
@@ -189,12 +192,10 @@ public abstract class AbstractCoverage implements ICoverage {
     	if (configProperty.getIgnorePattern() == null) 
     		return false;
     	String filename = file.getName();
-    	String parent = FileUtil.normalizePath(file.getParent());
-    	for (String pattern: configProperty.getIgnorePattern().getIngoreFiles()) {
-    	    System.out.println(pattern);
+    	String parent = FileUtil.normalizeFile(file).getAbsolutePath();
+    	for (String pattern: configProperty.getIgnorePattern().getIgnoreFiles()) {
     		Pattern re = Pattern.compile(pattern);
     		Matcher matcher = re.matcher(filename);
-    		System.out.println(matcher.find());
     		if (matcher.find())
     			return true;
     	}

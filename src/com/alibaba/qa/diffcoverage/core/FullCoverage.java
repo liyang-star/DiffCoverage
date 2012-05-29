@@ -24,11 +24,11 @@ public class FullCoverage extends AbstractCoverage {
     public CompilationUnit findCompilationUnit(String basePath, String objectFile) {
         String sourceFile = objectFileParser.lookForSourceFile(objectFile, basePath);
         if (sourceFile == null) {
-            logger.error(String.format(
-                "Can not parse source file from: %s, you should compile it with \"-g\" option", 
-                objectFile));
+            logger.error(String.format("Can not parse source file from: %s, " +
+        		"you should compile it with \"-g\" option", objectFile));
             return null;
         }
+        
         if (isIgnoreByPattern(new File(sourceFile)))
             return null;
 

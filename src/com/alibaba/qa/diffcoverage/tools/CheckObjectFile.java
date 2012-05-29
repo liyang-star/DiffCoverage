@@ -38,8 +38,6 @@ public class CheckObjectFile {
         return new MimetypesFileTypeMap().getContentType(file);
     }
     
-    
-    
     /**
      * @param args
      * @throws IOException 
