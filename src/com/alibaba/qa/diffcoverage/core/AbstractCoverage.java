@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.activation.MimetypesFileTypeMap;
 
@@ -13,7 +15,6 @@ import lombok.Setter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.regexp.RE;
 import org.openide.filesystems.FileUtil;
 
 import cambridge.FileTemplateLoader;
@@ -188,14 +189,16 @@ public abstract class AbstractCoverage implements ICoverage {
     	String filename = file.getName();
     	String parent = FileUtil.normalizePath(file.getParent());
     	for (String pattern: configProperty.getIgnorePattern().getIngoreFiles()) {
-    		RE re = new RE(pattern);
-    		if (re.match(filename))
+    		Pattern re = Pattern.compile(pattern);
+    		Matcher matcher = re.matcher(filename);
+    		if (matcher.find())
     			return true;
     	}
     	for (String pattern: configProperty.getIgnorePattern().getIgnoreDirs()) {
-    		RE re = new RE(pattern);
-    		if (re.match(parent))
-    			return true;
+            Pattern re = Pattern.compile(pattern);
+            Matcher matcher = re.matcher(filename);
+            if (matcher.find())
+                return true;
     	}
     	return false;
     }

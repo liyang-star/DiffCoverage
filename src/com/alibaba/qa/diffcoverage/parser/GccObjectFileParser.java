@@ -3,10 +3,11 @@ package com.alibaba.qa.diffcoverage.parser;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.apache.regexp.RE;
 import org.openide.filesystems.FileUtil;
 
 import com.google.common.collect.Lists;
@@ -46,11 +47,12 @@ public class GccObjectFileParser implements IObjectFileParser {
 		// 2011-12-07 garcia.wul 测试中，发现通过\x00
 		// split后，还有一些是以\x03/home/admin/***.gcda的情况，因此通过
 		// 正则表达式把这些去掉
-		RE pattern = new RE(String.format("%s", "(\\/.*?\\.gcda)"));
-		if (!pattern.match(gcdaFile)) {
+		Pattern pattern = Pattern.compile(String.format("%s", "(\\/.*?\\.gcda)"));
+		Matcher matcher = pattern.matcher(gcdaFile);
+		if (!matcher.find()) {
 			return null;
 		}
-		gcdaFile = pattern.getParen(0);
+		gcdaFile = matcher.group(0);
 		return FileUtil.normalizePath(gcdaFile);
 	}
 

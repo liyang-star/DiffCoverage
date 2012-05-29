@@ -1,9 +1,12 @@
 package com.alibaba.qa.diffcoverage.parser;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.apache.regexp.RE;
+import org.apache.commons.io.FileUtils;
 import org.eclipse.cdt.core.dom.ast.IASTFunctionDefinition;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.javatuples.Triplet;
@@ -26,18 +29,19 @@ public class NormalDiffFormatParser extends AbstractDiffParser {
 		List<Triplet<String, Integer, Integer>> files = splitFiles(diffStr);
 		for (Triplet<String, Integer, Integer> info: files) {
 			File file = new File(basePath, info.getValue0());
-			file = FileUtil.normalizeFile(file);
 			if (!file.exists()) {
-				logger.warn(String.format("%s does not exist", file));
-				continue;
+			    continue;
 			}
+			file = FileUtil.normalizeFile(file);
 			List<Integer> rows = Lists.newArrayList();
 			for (int i=info.getValue1().intValue(); i <= info.getValue2().intValue(); ++i)
 				rows.add(i);
 			IASTTranslationUnit translationUnit = ASTTranslationUnitCore.parse(file);
-			FunctionDefinitionVisitor functionDefinitionVisitor = new FunctionDefinitionVisitor();
+			FunctionDefinitionVisitor functionDefinitionVisitor = 
+			    new FunctionDefinitionVisitor();
 			translationUnit.accept(functionDefinitionVisitor);
-			for (IASTFunctionDefinition functionDefinition: functionDefinitionVisitor.getFunctionDefinitions()) {
+			for (IASTFunctionDefinition functionDefinition: 
+			    functionDefinitionVisitor.getFunctionDefinitions()) {
 				List<Integer> functionRows = Lists.newArrayList();
 				for (int i=functionDefinition.getFileLocation().getStartingLineNumber();
 					i<=functionDefinition.getFileLocation().getEndingLineNumber();
@@ -48,16 +52,21 @@ public class NormalDiffFormatParser extends AbstractDiffParser {
 					continue;
 				boolean flag = false;
 				for (ASTFileLocation diffFileLocation: diffFunctionProperties) {
-					if ((diffFileLocation.getStartingLineNumber() == functionDefinition.getFileLocation().getStartingLineNumber()) &&
-						(diffFileLocation.getEndingLineNumber() == functionDefinition.getFileLocation().getEndingLineNumber()))
+					if ((diffFileLocation.getStartingLineNumber() == 
+					    functionDefinition.getFileLocation().getStartingLineNumber()) &&
+						(diffFileLocation.getEndingLineNumber() == 
+						functionDefinition.getFileLocation().getEndingLineNumber()))
 						flag = true;
 				}
 				if (flag)
 					continue;
 				ASTFileLocation fileLocation = new ASTFileLocation();
-				fileLocation.setFilename(functionDefinition.getFileLocation().getFileName());
-				fileLocation.setStartingLineNumber(functionDefinition.getFileLocation().getStartingLineNumber());
-				fileLocation.setEndingLineNumber(functionDefinition.getFileLocation().getEndingLineNumber());
+				fileLocation.setFilename(
+				    functionDefinition.getFileLocation().getFileName());
+				fileLocation.setStartingLineNumber(
+				    functionDefinition.getFileLocation().getStartingLineNumber());
+				fileLocation.setEndingLineNumber(
+				    functionDefinition.getFileLocation().getEndingLineNumber());
 				diffFunctionProperties.add(fileLocation);
 			}
 		}
@@ -73,33 +82,44 @@ public class NormalDiffFormatParser extends AbstractDiffParser {
 			return files;
 		String filename = null;
 		for (String line: lines) {
-			RE pattern = new RE("^Index:\\s+(.*?)");
-			boolean isMatched = pattern.match(line);
-			if (isMatched) {
+			Pattern pattern = Pattern.compile("^Index:\\s+(.*?)");
+			Matcher matcher = pattern.matcher(line);
+			if (matcher.find()) {
 				filename = line.replaceFirst("^Index:\\s+", "");
 				continue;
 			}
-			RE pattern1 = new RE("^.*[a|d|c](\\d+),(\\d+)");
-			isMatched = pattern1.match(line);
-			if (isMatched) {
+			pattern = Pattern.compile("^.*[a|d|c](\\d+),(\\d+)");
+			matcher = pattern.matcher(line);
+			if (matcher.find()) {
 				files.add(
 					new Triplet<String, Integer, Integer>(new String(filename), 
-					Integer.valueOf(pattern1.getParen(1)), 
-					Integer.valueOf(pattern1.getParen(2))));
+					Integer.valueOf(matcher.group(1)), 
+					Integer.valueOf(matcher.group(2))));
 				continue;
 			}
-			RE pattern2 = new RE("^.*[a|d|c](\\d+)");
-			isMatched = pattern2.match(line);
-			if (isMatched) {
+			pattern = Pattern.compile("^.*[a|d|c](\\d+)");
+			matcher = pattern.matcher(line);
+			if (matcher.find()) {
 				files.add(
 					new Triplet<String, Integer, Integer>(new String(filename), 
-					Integer.valueOf(pattern2.getParen(1)), 
-					Integer.valueOf(pattern2.getParen(1))));
+	                    Integer.valueOf(matcher.group(1)), 
+	                    Integer.valueOf(matcher.group(1))));
 				continue;
 			}
 		}
 		
 		return files;
 	}
+	
+    public static void main(String[] args) throws IOException{
+        String basePath = "/home/admin/isearch_4_2_5_yc_iquery_D_20120322";
+        String diffFile = "/home/admin/z.diff";
+        NormalDiffFormatParser parser = new NormalDiffFormatParser(basePath);
+        List<ASTFileLocation> fileLocations =
+            parser.parse(FileUtils.readFileToString(new File(diffFile)));
+        for (ASTFileLocation fileLocation : fileLocations){
+            System.out.println(fileLocation);
+        }
+    }
 	
 }

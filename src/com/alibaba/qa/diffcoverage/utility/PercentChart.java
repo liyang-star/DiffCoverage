@@ -1,5 +1,6 @@
 package com.alibaba.qa.diffcoverage.utility;
 
+
 import lombok.Getter;
 import lombok.Setter;
 
