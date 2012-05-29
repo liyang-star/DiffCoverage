@@ -3,6 +3,7 @@ package com.alibaba.qa.diffcoverage.core;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,6 +32,7 @@ import com.alibaba.qa.diffcoverage.parser.GccObjectFileParser;
 import com.alibaba.qa.diffcoverage.parser.ICoverageFileParser;
 import com.alibaba.qa.diffcoverage.parser.IObjectFileParser;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
@@ -82,8 +84,8 @@ public abstract class AbstractCoverage implements ICoverage {
     }
 
     @Override
-    public List<String> findObjectFiles(String path) {
-        List<String> files = Lists.newArrayList();
+    public Queue<String> findObjectFiles(String path) {
+        Queue<String> files = Queues.newConcurrentLinkedQueue();
         File[] subFiles = new File(path).listFiles();
         if (subFiles == null)
             return files;

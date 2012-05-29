@@ -1,6 +1,7 @@
 package com.alibaba.qa.diffcoverage.core;
 
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 
 import com.alibaba.qa.diffcoverage.model.CompilationUnit;
@@ -35,7 +36,7 @@ public interface ICoverage {
      * @param path
      * @return
      */
-    public List<String> findObjectFiles(String path);
+    public Queue<String> findObjectFiles(String path);
     
     public ICoverageFileParser getCoverageFileParser();
     

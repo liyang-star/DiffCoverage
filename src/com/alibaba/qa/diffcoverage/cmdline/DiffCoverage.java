@@ -1,10 +1,10 @@
 package com.alibaba.qa.diffcoverage.cmdline;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Queue;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -141,7 +141,7 @@ public class DiffCoverage {
         
         
         // 查找所有的目标文件
-        List<String> objectFiles = coverage.findObjectFiles(
+        Queue<String> objectFiles = coverage.findObjectFiles(
             commandLineParser.getProjectPath().getAbsolutePath());
         if ((objectFiles == null) || (objectFiles.size() <= 0)) {
             logger.error(String.format("Can not found any object files"));
@@ -149,26 +149,26 @@ public class DiffCoverage {
         }
         
         List<FileProperty> fileProperties = Lists.newArrayList();
-        for (String objectFile: objectFiles) {
-            CompilationUnit compilationUnit = coverage.findCompilationUnit(
-                commandLineParser.getProjectPath().getAbsolutePath(), objectFile);
-            
-            if (compilationUnit == null)
-                continue;
-            FileProperty fileProperty = coverage.analyseCoverageFiles(
-                commandLineParser.getProjectPath().getAbsolutePath(), compilationUnit);
-            if (fileProperty == null)
-                continue;
-            fileProperties.add(fileProperty);
+        List<Thread> threads = Lists.newArrayList();
+        for (int i = 0; i != commandLineParser.getThreadsNum(); ++i) {
+            DiffCoverageRunnable runnable = new DiffCoverageRunnable(
+                objectFiles, coverage, commandLineParser, fileProperties);
+            threads.add(new Thread(runnable));
         }
+        for (Thread thread: threads)
+            thread.start();
+        for (Thread thread: threads)
+            thread.join();
+        
         // 增加对头文件覆盖率信息的统计
-        for (Entry<String, SourceFile> entry: 
-            coverage.getCoverageFileParser().getHeaderFiles().entrySet()) {
-            FileProperty fileProperty = coverage.getCoverageFileParser().parseHeader(entry);
-            if (fileProperty == null)
-                continue;
-            fileProperties.add(fileProperty);
-        }
+//        for (Entry<String, SourceFile> entry: 
+//            coverage.getCoverageFileParser().getHeaderFiles().entrySet()) {
+//            FileProperty fileProperty = coverage.getCoverageFileParser().parseHeader(entry);
+//            if (fileProperty == null)
+//                continue;
+//            fileProperties.add(fileProperty);
+//        }
+        
         if (fileProperties.size() <= 0) {
             logger.error(String.format("Analysed coverage file failed"));
             System.exit(10);

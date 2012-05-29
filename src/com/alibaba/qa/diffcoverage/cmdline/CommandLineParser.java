@@ -54,6 +54,10 @@ public class CommandLineParser {
     @Getter
     @Option(name="--isAllFile", usage="Include all files", required=false)
     private boolean isAllFile = false;
+    
+    @Getter 
+    @Option(name="--threadsNum", usage="Threads Num", required=false)
+    private int threadsNum = 1;
 
     @Getter
     private CmdLineParser cmdlineParser = new CmdLineParser(this);

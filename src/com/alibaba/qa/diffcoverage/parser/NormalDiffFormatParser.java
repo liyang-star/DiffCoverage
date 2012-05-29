@@ -88,7 +88,7 @@ public class NormalDiffFormatParser extends AbstractDiffParser {
 				filename = line.replaceFirst("^Index:\\s+", "");
 				continue;
 			}
-			pattern = Pattern.compile("^.*[a|d|c](\\d+),(\\d+)");
+			pattern = Pattern.compile("^\\d+\\,{0,1}\\d{0,1}[a|d|c](\\d+),(\\d+)");
 			matcher = pattern.matcher(line);
 			if (matcher.find()) {
 				files.add(
@@ -97,7 +97,7 @@ public class NormalDiffFormatParser extends AbstractDiffParser {
 					Integer.valueOf(matcher.group(2))));
 				continue;
 			}
-			pattern = Pattern.compile("^.*[a|d|c](\\d+)");
+			pattern = Pattern.compile("^\\d+\\,{0,1}\\d{0,1}[a|d|c](\\d+)");
 			matcher = pattern.matcher(line);
 			if (matcher.find()) {
 				files.add(
@@ -112,8 +112,8 @@ public class NormalDiffFormatParser extends AbstractDiffParser {
 	}
 	
     public static void main(String[] args) throws IOException{
-        String basePath = "/home/admin/isearch_4_2_5_yc_iquery_D_20120322";
-        String diffFile = "/home/admin/z.diff";
+        String basePath = "/home/admin/20120502_113645_opt-en2_2";
+        String diffFile = "/home/admin/diff.txt";
         NormalDiffFormatParser parser = new NormalDiffFormatParser(basePath);
         List<ASTFileLocation> fileLocations =
             parser.parse(FileUtils.readFileToString(new File(diffFile)));
