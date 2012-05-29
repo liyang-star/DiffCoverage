@@ -18,16 +18,16 @@ import org.openide.filesystems.FileUtil;
 public class CommandLineParser {
     @Getter @Setter @Option(name="--projectPath", usage="project path", 
         metaVar="projectPath", required=true)
-    private String projectPath = 
-        FileUtil.normalizeFile(new File(".").getAbsoluteFile()).getAbsolutePath();
+    private File projectPath = 
+        FileUtil.normalizeFile(new File(".").getAbsoluteFile());
 
     @Getter @Option(name="--output", usage="HTML's output path", 
         metaVar="Output", required=true)
-    private String output = null;
+    private File output = null;
 
     @Getter @Option(name="--ignoreFile", usage="Used to ignore some files",
         metaVar="IgnoreFile", required=false)
-    private String ignoreFile = null;
+    private File ignoreFile = null;
 
     @Getter @Option(name="--isIncrement", usage="Is analyse increment coverage?", 
         required=false)
@@ -35,7 +35,7 @@ public class CommandLineParser {
 
     @Getter @Option(name="--diffFile", usage="The diff file", 
         metaVar="DiffFile", required=false)
-    private String diffFile = null;
+    private File diffFile = null;
 
     @Getter @Option(name="--isNormalDiffFormat", 
         usage="Your diff file is normal format", required=false)
@@ -51,10 +51,9 @@ public class CommandLineParser {
     @Getter @Option(name="--help", usage="Print usage", required=false)
     private boolean isPrintUsage = false;
     
-    // 2012-03-05 garcia.wul 增加这个选项，用于统计所有文件的覆盖率信息，因为有些文件没有产生GCDA文件
-    @Getter @Option(name="--allFiles", usage="Include all files, even if no gcda file",
-        required=false)
-    private boolean isAllFiles = false;
+    @Getter
+    @Option(name="--isAllFile", usage="Include all files", required=false)
+    private boolean isAllFile = false;
 
     @Getter
     private CmdLineParser cmdlineParser = new CmdLineParser(this);
