@@ -98,19 +98,19 @@ public class CoverageFileParser implements ICoverageFileParser {
 		    if (fileLocations != null) {
 		        boolean isDiffFile = false;
 		        for (ASTFileLocation fileLocation: fileLocations) {
-		            if (fileLocation.getFilename().endsWith(sourceFile.getName())) {
+		            if (fileLocation.getFilename().endsWith(sourceFile2.getName())) {
 		                isDiffFile = true;
 		                break;
 		            }
 		        }
 		        if (!isDiffFile) {
 		            logger.debug(String.format("[%s]'s header file [%s] is not in diff", 
-		                compilationUnit.getSourceFile(), sourceFile.getName()));
+		                compilationUnit.getSourceFile(), sourceFile2.getName()));
 		            continue;
 		        }
 		        else {
 		            logger.debug(String.format("[%s]'s header file [%s] is in diff", 
-                        compilationUnit.getSourceFile(), sourceFile.getName()));
+                        compilationUnit.getSourceFile(), sourceFile2.getName()));
 		        }
 		    }
 		    
