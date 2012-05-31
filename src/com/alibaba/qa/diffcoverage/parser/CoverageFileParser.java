@@ -181,6 +181,20 @@ public class CoverageFileParser implements ICoverageFileParser {
 		    if (!headerFiles.keySet().contains(headerFile.getAbsolutePath())) {
 		        headerFiles.put(headerFile.getAbsolutePath(), sourceFile2);
 		    }
+		    else {
+		        SourceFile sFile = headerFiles.get(headerFile.getAbsoluteFile());
+		        for (Line line: sourceFile2.getLines()) {
+		            if (line.getCount() <= 0)
+		                continue;
+		            for (Line line2: sFile.getLines()) {
+		                if (line2.getLineNumber() != line.getLineNumber())
+		                    continue;
+		                line2.setExists(true);
+		                line2.setCount(line.getCount());
+		                break;
+		            }
+		        }
+		    }
 		}
 		IASTTranslationUnit translationUnit = 
 			ASTTranslationUnitCore.parse(new File(compilationUnit.getSourceFile()));

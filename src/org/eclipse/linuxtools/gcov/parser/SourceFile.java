@@ -60,10 +60,6 @@ public class SourceFile implements Serializable {
         return maxCount;
     }
 
-    /* getters & setters */
-
-
-
     public int getLinesExecuted() {
         return cvrge.getLinesExecuted();
     }
