@@ -173,7 +173,7 @@ public class DiffCoverage {
             thread.start();
         for (Thread thread: threads)
             thread.join();
-            logger.info(String.format("Finish to analysed all object files"));
+        logger.info(String.format("Finish to analysed all object files"));
         
         // 增加对头文件覆盖率信息的统计
         logger.info(String.format("Start analysing all headers' coverage"));
