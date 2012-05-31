@@ -102,8 +102,15 @@ public class CoverageFileParser implements ICoverageFileParser {
 		                break;
 		            }
 		        }
-		        if (!isDiffFile)
+		        if (!isDiffFile) {
+		            logger.debug(String.format("[%s]'s header file [%s] is not in diff", 
+		                compilationUnit.getSourceFile(), sourceFile.getName()));
 		            continue;
+		        }
+		        else {
+		            logger.debug(String.format("[%s]'s header file [%s] is in diff", 
+                        compilationUnit.getSourceFile(), sourceFile.getName()));
+		        }
 		    }
 		    
 		    // 如果是本项目目录下的,这种头文件肯定需要的
