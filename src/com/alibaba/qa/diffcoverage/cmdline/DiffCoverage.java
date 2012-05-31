@@ -31,7 +31,7 @@ import com.alibaba.qa.diffcoverage.utility.PathPropertiesExchanger;
 import com.google.common.collect.Lists;
 
 public class DiffCoverage {
-	private static String version = "0.6.5";
+	private static String version = "0.6.4";
 
     public static void main(String[] args) throws IOException, InterruptedException {
         CommandLineParser commandLineParser = new CommandLineParser();
