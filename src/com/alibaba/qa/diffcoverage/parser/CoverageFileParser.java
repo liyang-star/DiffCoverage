@@ -126,9 +126,9 @@ public class CoverageFileParser implements ICoverageFileParser {
 		    else {
 		        headerFile = new File(basePath, sourceFile2.getName());
 		        if (!headerFile.exists()) {
-		            headerFile = new File(basePath, 
-		                new File(compilationUnit.getSourceFile()).getParent());
-		            headerFile = new File(headerFile, sourceFile2.getName());
+		            headerFile = new File(
+		                new File(compilationUnit.getSourceFile()).getParent(), 
+		                sourceFile2.getName());
 		            if (!headerFile.exists())
 		                headerFile = null;
 		        }
