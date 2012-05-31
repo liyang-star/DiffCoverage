@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.cdt.core.dom.ast.IASTBreakStatement;
 import org.eclipse.cdt.core.dom.ast.IASTCaseStatement;
@@ -131,6 +132,40 @@ public class CoverageFileParser implements ICoverageFileParser {
 		                sourceFile2.getName());
 		            if (!headerFile.exists())
 		                headerFile = null;
+		            // 替换cpp文件的文件名后缀
+		            else {
+		                // TODO 2012-06-01 garcia.wul 通过后缀名不是一个好办法
+		                String name = null;
+		                if (compilationUnit.getSourceFile().endsWith(".cpp"))
+		                    name = StringUtils.stripEnd(compilationUnit.getSourceFile(), ".cpp");
+		                else if (compilationUnit.getSourceFile().endsWith(".cc"))
+		                    name = StringUtils.stripEnd(compilationUnit.getSourceFile(), ".cc");
+		                else if (compilationUnit.getSourceFile().endsWith(".cxx"))
+		                    name = StringUtils.stripEnd(compilationUnit.getSourceFile(), ".cxx");
+		                else if (compilationUnit.getSourceFile().endsWith(".c"))
+		                    name = StringUtils.stripEnd(compilationUnit.getSourceFile(), ".c");
+		                String name2 = null;
+		                if (sourceFile2.getName().endsWith(".h"))
+		                    name2 = StringUtils.stripEnd(sourceFile2.getName(), ".h");
+		                else if (sourceFile2.getName().endsWith(".hh"))
+		                    name2 = StringUtils.stripEnd(sourceFile2.getName(), ".hh");
+		                else if (sourceFile2.getName().endsWith(".hpp"))
+		                    name2 = StringUtils.stripEnd(sourceFile2.getName(), ".hpp");
+		                else if (sourceFile2.getName().endsWith(".hxx"))
+		                    name2 = StringUtils.stripEnd(sourceFile2.getName(), ".hxx");
+		                if ((name != null) && (name2 != null) && (name.endsWith(name2))) {
+		                    if (sourceFile.getName().endsWith(".h"))
+		                        headerFile = new File(String.format("%s.h", name));
+		                    else if (sourceFile.getName().endsWith(".hh"))
+		                        headerFile = new File(String.format("%s.hh", name));
+		                    else if (sourceFile.getName().endsWith(".hpp"))
+		                        headerFile = new File(String.format("%s.hpp", name));
+		                    else if (sourceFile.getName().endsWith(".hxx"))
+		                        headerFile = new File(String.format("%s.xx", name));
+		                    if (!headerFile.exists())
+		                        headerFile = null;
+		                }
+		            }
 		        }
 		    }
 		    if (headerFile == null) {
