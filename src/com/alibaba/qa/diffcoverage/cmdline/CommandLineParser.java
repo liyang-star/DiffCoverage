@@ -51,10 +51,6 @@ public class CommandLineParser {
     @Getter @Option(name="--help", usage="Print usage", required=false)
     private boolean isPrintUsage = false;
     
-    @Getter
-    @Option(name="--isAllFile", usage="Include all files", required=false)
-    private boolean isAllFile = false;
-    
     @Getter 
     @Option(name="--threadsNum", usage="Threads Num", required=false)
     private int threadsNum = 1;

@@ -31,7 +31,7 @@ import com.alibaba.qa.diffcoverage.utility.PathPropertiesExchanger;
 import com.google.common.collect.Lists;
 
 public class DiffCoverage {
-	private static String version = "0.6.4";
+	private static String version = "0.6.5";
 
     public static void main(String[] args) throws IOException, InterruptedException {
         CommandLineParser commandLineParser = new CommandLineParser();
@@ -123,8 +123,6 @@ public class DiffCoverage {
         	System.exit(7);
         }
         
-        configProperty.setAllFile(commandLineParser.isAllFile());
-
         ICoverage coverage = null;
 
         // 如果是计算增量覆盖率
@@ -199,15 +197,13 @@ public class DiffCoverage {
             }
         });
         
-//        if (configProperty.isAllFile()) {
-//            for (String sourceFile: coverage.getZeroFiles()) {
-//                FileProperty fileProperty = 
-//                    coverage.getCoverageFileParser().parseZeroFile(sourceFile);
-//                if (fileProperty == null)
-//                    continue;
-//                fileProperties.add(fileProperty);
-//            }
-//        }
+        for (String sourceFile: coverage.getZeroFiles()) {
+            FileProperty fileProperty = 
+                coverage.getCoverageFileParser().parseZeroFile(sourceFile);
+            if (fileProperty == null)
+                continue;
+            fileProperties.add(fileProperty);
+        }
         
         // 换一个覆盖率信息的纬度
         PathPropertiesExchanger pathPropertiesExchanger = new PathPropertiesExchanger();

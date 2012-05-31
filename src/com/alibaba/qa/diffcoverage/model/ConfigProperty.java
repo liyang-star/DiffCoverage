@@ -31,6 +31,4 @@ public class ConfigProperty {
     }
     
     private IgnorePattern ignorePattern = new IgnorePattern();
-    
-    private boolean isAllFile = false;
 }

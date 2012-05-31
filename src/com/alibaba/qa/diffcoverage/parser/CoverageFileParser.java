@@ -94,20 +94,20 @@ public class CoverageFileParser implements ICoverageFileParser {
 		        continue;
 		    
 		    // 这个isDiffFile是用于增量覆盖率的,如果该头文件不在Diff信息中,则不考虑它
-		    boolean isDiffFile = false;
 		    if (fileLocations != null) {
+		        boolean isDiffFile = false;
 		        for (ASTFileLocation fileLocation: fileLocations) {
 		            if (fileLocation.getFilename().endsWith(sourceFile.getName())) {
 		                isDiffFile = true;
 		                break;
 		            }
 		        }
+		        if (!isDiffFile)
+		            continue;
 		    }
-		    if (!isDiffFile)
-		        continue;
 		    
 		    // 如果是本项目目录下的,这种头文件肯定需要的
-		    // TODO garcia.wul 2012-05-31 garcia.wul 
+		    // TODO 2012-05-31 garcia.wul 
 		    // 这里查找所依赖的头文件的办法可能需要一种更为合理的办法
 		    File headerFile = null;
 		    if (new File(sourceFile2.getName()).isAbsolute()) {
