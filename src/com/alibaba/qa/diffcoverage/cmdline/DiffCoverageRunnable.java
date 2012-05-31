@@ -10,8 +10,6 @@ import com.alibaba.qa.diffcoverage.model.CompilationUnit;
 import com.alibaba.qa.diffcoverage.model.FileProperty;
 
 public class DiffCoverageRunnable implements Runnable {
-    private long timestamp = System.currentTimeMillis();
-    
     private List<FileProperty> fileProperties = null;
     private Queue<String> objectFiles = null;
     private ICoverage coverage = null;
@@ -33,8 +31,8 @@ public class DiffCoverageRunnable implements Runnable {
     public void run(){
         while (!objectFiles.isEmpty()) {
             String objectFile = objectFiles.remove();
-            logger.info(String.format("Analysing [%s] compilation unit, %s", 
-                objectFile, timestamp));
+            logger.info(String.format("Analysing [%s] compilation unit", 
+                objectFile));
             CompilationUnit compilationUnit = coverage.findCompilationUnit(
                 commandLineParser.getProjectPath().getAbsolutePath(), objectFile);
             if (compilationUnit == null)

@@ -83,12 +83,17 @@ public class CoverageFileParser implements ICoverageFileParser {
 		        compilationUnit.getGcdaFile()));
 		    return null;
 		}
-		// 查找其他头文件
+		
+		// 查找其他文件，比如头文件
 		for (SourceFile sourceFile2: covManager.getAllSrcs()) {
+		    // TODO garcia.wul 2012-05-13 有没有更好地识别头文件的办法?
 		    if (!sourceFile2.getName().endsWith(".h") && 
+		        !sourceFile2.getName().endsWith(".hh") &&
 		        !sourceFile2.getName().endsWith(".hpp") &&
 		        !sourceFile2.getName().endsWith(".hxx"))
 		        continue;
+		    
+		    // 这个flag是用于增量覆盖率的
 		    boolean flag = true;
 		    if (fileLocations != null) {
 		        for (ASTFileLocation fileLocation: fileLocations) {
@@ -99,25 +104,39 @@ public class CoverageFileParser implements ICoverageFileParser {
 		    if (!flag)
 		        continue;
 		    
-            // 如果是本项目目录下的,这种头文件肯定需要的
-            if (sourceFile2.getName().startsWith(basePath)) {
-                if (!headerFiles.keySet().contains(sourceFile2.getName())) {
-                    headerFiles.put(
-                        FileUtil.normalizePath(sourceFile2.getName()), sourceFile2);
-                }
-                continue;
-            }
-            // 如果join上cpp所在的路径后，该头文件也是需要的
-            File file = new File(new File(
-                compilationUnit.getSourceFile()).getParent(), sourceFile2.getName());
-            if (file.exists()) {
-                if (!headerFiles.keySet().contains(
-                    FileUtil.normalizePath(file.toString()))) {
-                        headerFiles.put(FileUtil.normalizeFile(file).getAbsolutePath(), 
-                            sourceFile2);
-                    }
-                continue;
-            }
+		    // 如果是本项目目录下的,这种头文件肯定需要的
+		    // TODO garcia.wul 2012-05-31 garcia.wul 
+		    // 这里查找所依赖的头文件的办法可能需要一种更为合理的办法
+		    File headerFile = null;
+		    if (new File(sourceFile2.getName()).isAbsolute()) {
+		        headerFile = new File(sourceFile2.getName());
+		        headerFile = FileUtil.normalizeFile(headerFile);
+		        if (!headerFile.getAbsolutePath().startsWith(basePath))
+		            continue;
+		    }
+		    else {
+		        headerFile = new File(basePath, sourceFile2.getName());
+		        if (!headerFile.exists()) {
+		            headerFile = new File(basePath, 
+		                new File(compilationUnit.getSourceFile()).getParent());
+		            headerFile = new File(headerFile, sourceFile2.getName());
+		            if (!headerFile.exists())
+		                headerFile = null;
+		        }
+		    }
+		    if (headerFile == null) {
+		        logger.warn(String.format("Can not find header file: [%s]", 
+		            sourceFile2.getName()));
+		        continue;
+		    }
+		    else {
+		        headerFile = FileUtil.normalizeFile(headerFile);
+		        logger.debug(String.format("Found [%s]'s header file: [%s]", 
+		            compilationUnit.getSourceFile(), headerFile));
+		    }
+		    if (!headerFiles.keySet().contains(headerFile.getAbsolutePath())) {
+		        headerFiles.put(headerFile.getAbsolutePath(), sourceFile2);
+		    }
 		}
 		IASTTranslationUnit translationUnit = 
 			ASTTranslationUnitCore.parse(new File(compilationUnit.getSourceFile()));

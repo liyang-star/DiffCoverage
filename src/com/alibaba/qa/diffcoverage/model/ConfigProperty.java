@@ -26,7 +26,7 @@ public class ConfigProperty {
     public Properties getDebugLoggerProperties() {
         loggerProperties.setProperty("log4j.rootLogger", "DEBUG,CONSOLE");
         loggerProperties.setProperty("log4j.appender.Threshold", "DEBUG");
-        loggerProperties.setProperty("log4j.appender.CONSOLE.layout.ConversionPattern", "[%p][%d] - <%l> - %m %n");
+//        loggerProperties.setProperty("log4j.appender.CONSOLE.layout.ConversionPattern", "[%p][%d] - <%l> - %m %n");
         return loggerProperties;
     }
     

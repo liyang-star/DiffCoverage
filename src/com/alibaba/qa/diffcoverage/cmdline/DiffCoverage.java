@@ -2,12 +2,16 @@ package com.alibaba.qa.diffcoverage.cmdline;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Queue;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.eclipse.linuxtools.gcov.parser.SourceFile;
 import org.ho.yaml.Yaml;
 import org.kohsuke.args4j.CmdLineException;
 import org.openide.filesystems.FileUtil;
@@ -174,28 +178,36 @@ public class DiffCoverage {
             logger.info(String.format("Finish to analysed all object files"));
         
         // 增加对头文件覆盖率信息的统计
-//        for (Entry<String, SourceFile> entry: 
-//            coverage.getCoverageFileParser().getHeaderFiles().entrySet()) {
-//            FileProperty fileProperty = coverage.getCoverageFileParser().parseHeader(entry);
-//            if (fileProperty == null)
-//                continue;
-//            fileProperties.add(fileProperty);
-//        }
+        logger.info(String.format("Start analysing all headers' coverage"));
+        for (Entry<String, SourceFile> entry: 
+            coverage.getCoverageFileParser().getHeaderFiles().entrySet()) {
+            FileProperty fileProperty = coverage.getCoverageFileParser().parseHeader(entry);
+            if (fileProperty == null)
+                continue;
+            fileProperties.add(fileProperty);
+        }
         
         if (fileProperties.size() <= 0) {
             logger.error(String.format("Analysed coverage file failed"));
             System.exit(10);
         }
         
-        if (configProperty.isAllFile()) {
-            for (String sourceFile: coverage.getZeroFiles()) {
-                FileProperty fileProperty = 
-                    coverage.getCoverageFileParser().parseZeroFile(sourceFile);
-                if (fileProperty == null)
-                    continue;
-                fileProperties.add(fileProperty);
+        Collections.sort(fileProperties, new Comparator<FileProperty>(){
+            @Override
+            public int compare(FileProperty o1, FileProperty o2){
+                return o1.getFilename().compareToIgnoreCase(o2.getFilename());
             }
-        }
+        });
+        
+//        if (configProperty.isAllFile()) {
+//            for (String sourceFile: coverage.getZeroFiles()) {
+//                FileProperty fileProperty = 
+//                    coverage.getCoverageFileParser().parseZeroFile(sourceFile);
+//                if (fileProperty == null)
+//                    continue;
+//                fileProperties.add(fileProperty);
+//            }
+//        }
         
         // 换一个覆盖率信息的纬度
         PathPropertiesExchanger pathPropertiesExchanger = new PathPropertiesExchanger();
