@@ -93,15 +93,17 @@ public class CoverageFileParser implements ICoverageFileParser {
 		        !sourceFile2.getName().endsWith(".hxx"))
 		        continue;
 		    
-		    // 这个flag是用于增量覆盖率的
-		    boolean flag = true;
+		    // 这个isDiffFile是用于增量覆盖率的,如果该头文件不在Diff信息中,则不考虑它
+		    boolean isDiffFile = false;
 		    if (fileLocations != null) {
 		        for (ASTFileLocation fileLocation: fileLocations) {
-		            if (fileLocation.getFilename().endsWith(sourceFile.getName()))
-		                flag = false;
+		            if (fileLocation.getFilename().endsWith(sourceFile.getName())) {
+		                isDiffFile = true;
+		                break;
+		            }
 		        }
 		    }
-		    if (!flag)
+		    if (!isDiffFile)
 		        continue;
 		    
 		    // 如果是本项目目录下的,这种头文件肯定需要的
