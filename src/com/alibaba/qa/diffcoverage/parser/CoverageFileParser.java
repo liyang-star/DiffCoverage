@@ -174,6 +174,9 @@ public class CoverageFileParser implements ICoverageFileParser {
         return fileProperty;
     }
     
+    // TODO 2012-06-01 garcia.wul
+    // (1)首先,只考虑函数的定义是否合理?是否有部分内容漏掉了?
+    // (2)其次,函数中有注释什么的目前也被统计进去了
     @Override
     public FileProperty parseZeroFile(String sourceFile) {
         List<Line> lines = Lists.newArrayList();
@@ -185,7 +188,7 @@ public class CoverageFileParser implements ICoverageFileParser {
             return null;
         }
         for (int i = 0; i != fileLines.size(); ++i) {
-            Line line = new Line(i);
+            Line line = new Line(i + 1);
             line.setCount(0);
             line.setExists(false);
             lines.add(line);
@@ -198,9 +201,9 @@ public class CoverageFileParser implements ICoverageFileParser {
             translationUnit.accept(functionDefinitionVisitor);
             for (IASTFunctionDefinition functionDefinition: 
                 functionDefinitionVisitor.getFunctionDefinitions()) {
-                for (int i = functionDefinition.getFileLocation().getStartingLineNumber() - 1; 
-                    i < functionDefinition.getFileLocation().getEndingLineNumber(); ++i) {
-                    lines.get(i).setExists(true);
+                for (int i = functionDefinition.getFileLocation().getStartingLineNumber(); 
+                    i <= functionDefinition.getFileLocation().getEndingLineNumber(); ++i) {
+                    lines.get(i - 1).setExists(true);
                 }
             }
         }
@@ -208,9 +211,9 @@ public class CoverageFileParser implements ICoverageFileParser {
             for (ASTFileLocation fileLocation: fileLocations) {
                 if (!fileLocation.getFilename().equals(sourceFile))
                     continue;
-                for (int i = fileLocation.getStartingLineNumber() - 1;
-                    i < fileLocation.getEndingLineNumber(); ++i)
-                    lines.get(i).setExists(true);
+                for (int i = fileLocation.getStartingLineNumber();
+                    i <= fileLocation.getEndingLineNumber(); ++i)
+                    lines.get(i - 1).setExists(true);
             }
         }
         
