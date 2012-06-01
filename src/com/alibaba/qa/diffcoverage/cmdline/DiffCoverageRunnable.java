@@ -41,6 +41,18 @@ public class DiffCoverageRunnable implements Runnable {
                 commandLineParser.getProjectPath().getAbsolutePath(), compilationUnit);
             if (fileProperty == null)
                 continue;
+            
+            boolean isInclude = false;
+            for (FileProperty property: fileProperties) {
+                if (property.getFilename().equals(fileProperty.getFilename())) {
+                    isInclude = true;
+                    break;
+                }
+            }
+            if (isInclude)
+                continue;
+            logger.info(String.format("Got [%s] compilation unit: %s", 
+                objectFile, compilationUnit));
             fileProperties.add(fileProperty);
         }
     }

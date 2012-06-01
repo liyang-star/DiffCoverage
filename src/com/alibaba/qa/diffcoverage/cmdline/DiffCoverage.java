@@ -23,15 +23,18 @@ import com.alibaba.qa.diffcoverage.model.ASTFileLocation;
 import com.alibaba.qa.diffcoverage.model.ConfigProperty;
 import com.alibaba.qa.diffcoverage.model.FileProperty;
 import com.alibaba.qa.diffcoverage.model.IgnorePattern;
+import com.alibaba.qa.diffcoverage.model.LineProperty;
 import com.alibaba.qa.diffcoverage.model.PathProperty;
 import com.alibaba.qa.diffcoverage.parser.IDiffParser;
 import com.alibaba.qa.diffcoverage.parser.NormalDiffFormatParser;
 import com.alibaba.qa.diffcoverage.parser.UnifiedDiffFormatParser;
 import com.alibaba.qa.diffcoverage.utility.PathPropertiesExchanger;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
 public class DiffCoverage {
-	private static String version = "0.6.4";
+	private static String version = "0.6.5";
 
     public static void main(String[] args) throws IOException, InterruptedException {
         CommandLineParser commandLineParser = new CommandLineParser();
@@ -184,14 +187,14 @@ public class DiffCoverage {
                 continue;
             // 如果所有行数都是可以被忽略的
             // TODO 2012-06-01 garcia.wul 这块貌似有BUG，暂时先注释掉了
-//            if (Collections2.filter(fileProperty.getLines(), new Predicate<LineProperty>(){
-//
-//                @Override
-//                public boolean apply(LineProperty arg0){
-//                    return !arg0.isShouldIgnore();
-//                }
-//            }).size() <= 0)
-//                continue;
+            if (Collections2.filter(fileProperty.getLines(), new Predicate<LineProperty>(){
+
+                @Override
+                public boolean apply(LineProperty arg0){
+                    return !arg0.isShouldIgnore();
+                }
+            }).size() <= 0)
+                continue;
             fileProperties.add(fileProperty);
         }
         

@@ -92,10 +92,8 @@ public abstract class AbstractCoverage implements ICoverage {
         for (File file: subFiles) {
             if (file.isDirectory())
                 files.addAll(findObjectFiles(FileUtil.normalizePath(file.getAbsolutePath())));
-            else if ((getFileMimeType(file).contains("application/octet-stream")) &&
-                ((file.toString().endsWith(".o") || file.toString().endsWith(".obj")))) {
-                if (!FileUtil.normalizeFile(file.getAbsoluteFile()).exists())
-                    continue;
+            else if (file.getAbsolutePath().endsWith(".o") || 
+                file.toString().endsWith(".obj")) {
                 files.add(FileUtil.normalizePath(file.getAbsolutePath()));
             }
         }

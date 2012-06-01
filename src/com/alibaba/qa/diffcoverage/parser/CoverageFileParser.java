@@ -178,11 +178,8 @@ public class CoverageFileParser implements ICoverageFileParser {
 		        logger.debug(String.format("Found [%s]'s header file: [%s]", 
 		            compilationUnit.getSourceFile(), headerFile));
 		    }
-		    if (!headerFiles.keySet().contains(headerFile.getAbsolutePath())) {
-		        headerFiles.put(headerFile.getAbsolutePath(), sourceFile2);
-		    }
-		    else {
-		        SourceFile sFile = headerFiles.get(headerFile.getAbsoluteFile());
+		    if (headerFiles.keySet().contains(headerFile.getAbsolutePath())) {
+		        SourceFile sFile = headerFiles.get(headerFile.getAbsolutePath());
 		        for (Line line: sourceFile2.getLines()) {
 		            if (line.getCount() <= 0)
 		                continue;
@@ -194,6 +191,9 @@ public class CoverageFileParser implements ICoverageFileParser {
 		                break;
 		            }
 		        }
+		    }
+		    else {
+		        headerFiles.put(headerFile.getAbsolutePath(), sourceFile2);
 		    }
 		}
 		IASTTranslationUnit translationUnit = 
