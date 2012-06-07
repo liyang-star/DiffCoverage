@@ -88,7 +88,7 @@ public class NormalDiffFormatParser extends AbstractDiffParser {
 				filename = line.replaceFirst("^Index:\\s+", "");
 				continue;
 			}
-			pattern = Pattern.compile("^\\d+\\,{0,1}\\d{0,1}[a|d|c](\\d+),(\\d+)");
+			pattern = Pattern.compile("\\d+\\,{0,1}\\d{0,1}[a|d|c](\\d+),(\\d+)");
 			matcher = pattern.matcher(line);
 			if (matcher.find()) {
 				files.add(
@@ -97,7 +97,7 @@ public class NormalDiffFormatParser extends AbstractDiffParser {
 					Integer.valueOf(matcher.group(2))));
 				continue;
 			}
-			pattern = Pattern.compile("^\\d+\\,{0,1}\\d{0,1}[a|d|c](\\d+)");
+			pattern = Pattern.compile("\\d+\\,{0,1}\\d{0,1}[a|d|c](\\d+)");
 			matcher = pattern.matcher(line);
 			if (matcher.find()) {
 				files.add(
