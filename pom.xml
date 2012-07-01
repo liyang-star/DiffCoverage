@@ -114,7 +114,7 @@
               </filters>
             </configuration>
           </execution>
-          
+
           <execution>
             <id>Build CheckObjectFile</id>
             <phase>package</phase>
@@ -236,6 +236,12 @@
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
       <version>2.6</version>
+    </dependency>
+
+    <dependency>
+      <groupId>jakarta-regexp</groupId>
+      <artifactId>jakarta-regexp</artifactId>
+      <version>1.4</version>
     </dependency>
 
     <dependency>

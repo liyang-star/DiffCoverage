@@ -32,7 +32,7 @@ public class FullCoverage extends AbstractCoverage {
         if (isIgnoreByPattern(new File(sourceFile)))
             return null;
 
-        String gcdaFile = objectFileParser.lookForGcdaPath(objectFile);
+        String gcdaFile = objectFileParser.lookForGcdaPath(objectFile, basePath);
         
         // 如果编译该文件时没有加上-ftest-coverage -fprofile-arcs这两个选项
         if (gcdaFile == null) {

@@ -47,7 +47,7 @@ public class UpgradeCoverage extends AbstractCoverage {
         if (!diffFiles.contains(sourceFile.toString()))
             return null;
 
-        String gcdaFile = objectFileParser.lookForGcdaPath(objectFile);
+        String gcdaFile = objectFileParser.lookForGcdaPath(objectFile, basePath);
         if (gcdaFile == null) {
             logger.warn(String.format(
                 "Can not parse data file from [%s], " +

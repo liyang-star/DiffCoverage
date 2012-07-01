@@ -15,5 +15,5 @@ public interface IObjectFileParser {
      * @param objectFile
      * @return 如果解析/打开文件失败，则返回null;否则返回解析得到的gcda文件
      */
-    public String lookForGcdaPath(String objectFile);
+    public String lookForGcdaPath(String objectFile, String basePath);
 }

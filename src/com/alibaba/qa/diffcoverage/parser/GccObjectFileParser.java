@@ -3,11 +3,10 @@ package com.alibaba.qa.diffcoverage.parser;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.apache.regexp.RE;
 import org.openide.filesystems.FileUtil;
 
 import com.google.common.collect.Lists;
@@ -22,43 +21,26 @@ public class GccObjectFileParser implements IObjectFileParser {
 	private Logger logger = Logger.getRootLogger();
 
 	@Override
-	public String lookForGcdaPath(String objectFile) {
+	public String lookForGcdaPath(String objectFile, String basePath) {
 		String content = null;
 		try {
 			content = FileUtils.readFileToString(new File(objectFile));
 		} catch (IOException e) {
-			logger.error(e.getMessage());
+			e.printStackTrace();
 			return null;
 		}
 
-		String gcdaFile = null;
-		String[] fields = content.split("\\x00");
-		for (String field : fields) {
-			if (field.endsWith(".gcda")) {
-				gcdaFile = field;
-				break;
-			}
-		}
-		if (gcdaFile == null) {
-			logger.debug(String.format(
-		        "Can not parse gcda file from object file: %s", objectFile));
-			return null;
-		}
-		// 2011-12-07 garcia.wul 测试中，发现通过\x00
-		// split后，还有一些是以\x03/home/admin/***.gcda的情况，因此通过
-		// 正则表达式把这些去掉
-		Pattern pattern = Pattern.compile(String.format("%s", "(\\/.*?\\.gcda)"));
-		Matcher matcher = pattern.matcher(gcdaFile);
-		if (!matcher.find()) {
-			return null;
-		}
-		gcdaFile = matcher.group(0);
+		String regex = String.format("(%s.*?\\.gcda)", basePath);
+		RE pattern = new RE(regex);
+		if (!pattern.match(content))
+		    return null;
+		String gcdaFile = pattern.getParen(0);
+		
 		return FileUtil.normalizePath(gcdaFile);
 	}
 
 	@Override
 	public String lookForSourceFile(String objectFile, String basePath) {
-		basePath = FileUtil.normalizePath(basePath);
 		String content = null;
 		try {
 			content = FileUtils.readFileToString(new File(objectFile));
@@ -109,5 +91,13 @@ public class GccObjectFileParser implements IObjectFileParser {
 			s = s.replace(Character.toString((char) i), "");
 		}
 		return s;
+	}
+	
+	public static void main(String[] args) {
+	    String objectFile = "/home/wul/cppcheck/lib/checkclass.o";
+	    String basePath = "/home/wul/cppcheck";
+	    GccObjectFileParser parser = new GccObjectFileParser();
+	    String gcdaFile = parser.lookForGcdaPath(objectFile, basePath);
+	    System.out.println(gcdaFile);
 	}
 }
