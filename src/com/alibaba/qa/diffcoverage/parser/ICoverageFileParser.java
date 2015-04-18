@@ -13,7 +13,7 @@ import com.alibaba.qa.diffcoverage.model.FileProperty;
  * <p>
  * 在解析前请先确保每一个gcda文件所在的路径下，有一个同名的gcno文件，否则会解析失败
  * </p>
- * @author garcia.wul@alibaba-inc.com
+ * @author garcia.relax@gmail.com
  *
  */
 public interface ICoverageFileParser {

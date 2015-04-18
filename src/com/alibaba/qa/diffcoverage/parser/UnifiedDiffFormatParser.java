@@ -30,7 +30,7 @@ import com.google.common.collect.Sets;
 /**
  * 解析统一差异格式
  * 
- * @author garcia.wul@alibaba-inc.com
+ * @author garcia.relax@gmail.com
  * 
  */
 public class UnifiedDiffFormatParser extends AbstractDiffParser{

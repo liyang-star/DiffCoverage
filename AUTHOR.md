@@ -1,2 +1,2 @@
 # Authors
-* garcia.wul <garcia.wul@alibaba-inc.com>
+* Wu Liang <garcia.relax@gmail.com>

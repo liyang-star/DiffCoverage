@@ -39,12 +39,12 @@ import com.ibm.icu.text.CharsetMatch;
 
 /**
  * ICoverage的抽象类
- * @author garcia.wul@alibaba-inc.com
+ * @author garcia.relax@gmail.com
  *
  */
 public abstract class AbstractCoverage implements ICoverage {
     protected Logger logger = Logger.getRootLogger();
-    // TODO 20110-12-07 garcia.wul 这个属性使用Guice的注入来实现多态可能更好
+    // TODO 20110-12-07 Wu Liang 这个属性使用Guice的注入来实现多态可能更好
     protected IObjectFileParser objectFileParser = new GccObjectFileParser();
     @Getter
     protected ICoverageFileParser coverageFileParser = new CoverageFileParser();
@@ -62,7 +62,7 @@ public abstract class AbstractCoverage implements ICoverage {
     @Setter
     protected ConfigProperty configProperty = null;
     
-    // 2012-03-05 garcia.wul 这些文件是没有产生GCDA文件的
+    // 2012-03-05 Wu Liang 这些文件是没有产生GCDA文件的
     @Getter @Setter
     protected Set<String> zeroFiles = Sets.newHashSet();
 

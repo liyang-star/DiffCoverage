@@ -50,7 +50,7 @@ import com.google.common.collect.Maps;
 
 /**
  * 对ICoverageFileParser接口的具体实现
- * @author garcia.wul@alibaba-inc.com
+ * @author garcia.relax@gmail.com
  *
  */
 public class CoverageFileParser implements ICoverageFileParser {
@@ -87,7 +87,7 @@ public class CoverageFileParser implements ICoverageFileParser {
 		
 		// 查找其他文件，比如头文件
 		for (SourceFile sourceFile2: covManager.getAllSrcs()) {
-		    // TODO garcia.wul 2012-05-13 有没有更好地识别头文件的办法?
+		    // TODO Wu Liang 2012-05-13 有没有更好地识别头文件的办法?
 		    if (!sourceFile2.getName().endsWith(".h") && 
 		        !sourceFile2.getName().endsWith(".hh") &&
 		        !sourceFile2.getName().endsWith(".hpp") &&
@@ -115,7 +115,7 @@ public class CoverageFileParser implements ICoverageFileParser {
 		    }
 		    
 		    // 如果是本项目目录下的,这种头文件肯定需要的
-		    // TODO 2012-05-31 garcia.wul 
+		    // TODO 2012-05-31 Wu Liang 
 		    // 这里查找所依赖的头文件的办法可能需要一种更为合理的办法
 		    File headerFile = null;
 		    if (new File(sourceFile2.getName()).isAbsolute()) {
@@ -134,7 +134,7 @@ public class CoverageFileParser implements ICoverageFileParser {
 		                headerFile = null;
 		            // 替换cpp文件的文件名后缀
 		            else {
-		                // TODO 2012-06-01 garcia.wul 通过后缀名不是一个好办法
+		                // TODO 2012-06-01 Wu Liang 通过后缀名不是一个好办法
 		                String name = null;
 		                if (compilationUnit.getSourceFile().endsWith(".cpp"))
 		                    name = StringUtils.stripEnd(compilationUnit.getSourceFile(), ".cpp");
@@ -230,7 +230,7 @@ public class CoverageFileParser implements ICoverageFileParser {
         return fileProperty;
     }
     
-    // TODO 2012-06-01 garcia.wul
+    // TODO 2012-06-01 Wu Liang
     // (1)首先,只考虑函数的定义是否合理?是否有部分内容漏掉了?
     // (2)其次,函数中有注释什么的目前也被统计进去了
     @Override

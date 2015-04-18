@@ -14,7 +14,7 @@ import com.google.common.collect.Lists;
 /**
  * 实现由gcc编译得到C/C++目标文件的解析
  * 
- * @author garcia.wul@alibaba-inc.com
+ * @author garcia.relax@gmail.com
  * 
  */
 public class GccObjectFileParser implements IObjectFileParser {
@@ -52,7 +52,7 @@ public class GccObjectFileParser implements IObjectFileParser {
 		String[] fields = content.split("\\x00");
 		List<String> sourceFilenames = Lists.newArrayList();
 		
-		// TODO 2012-05-29 garcia.wul 
+		// TODO 2012-05-29 Wu Liang 
 		// 目前只能支持以*.c/*.cc/*.cpp/*.cxx结尾的文件
 		for (String field : fields) {
 			field = removeInvalidCharacters(field);

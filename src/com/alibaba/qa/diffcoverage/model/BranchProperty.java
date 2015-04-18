@@ -7,7 +7,7 @@ import lombok.Data;
 
 /**
  * 代码块所具有的属性
- * @author garcia.wul@alibaba-inc.com
+ * @author garcia.relax@gmail.com
  *
  */
 @Data

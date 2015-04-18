@@ -11,7 +11,7 @@ import org.junit.Test;
 
 /**
  * 对CoverageFileParser的单元测试
- * @author garcia.wul@alibaba-inc.com
+ * @author garcia.relax@gmail.com
  *
  */
 public class CoverageFileParserTester {

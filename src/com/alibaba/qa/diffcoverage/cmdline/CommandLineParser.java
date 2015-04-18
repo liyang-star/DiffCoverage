@@ -12,7 +12,7 @@ import org.openide.filesystems.FileUtil;
 
 /**
  * 用于解析命令行参数
- * @author garcia.wul
+ * @author Wu Liang
  *
  */
 public class CommandLineParser {

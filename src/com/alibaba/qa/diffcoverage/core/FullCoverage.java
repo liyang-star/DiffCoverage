@@ -44,14 +44,14 @@ public class FullCoverage extends AbstractCoverage {
             return null;
         }
         
-        // TODO 2012-01-09 garcia.wul 如果某一个文件一行代码都没有被覆盖到,则数据文件将不会被生成
+        // TODO 2012-01-09 Wu Liang 如果某一个文件一行代码都没有被覆盖到,则数据文件将不会被生成
         if (!new File(gcdaFile).exists()) {
             logger.warn(String.format("[%s] does not exist, becasuse not be coveraged", 
                 gcdaFile));
             zeroFiles.add(sourceFile);
             return null;
         }
-        // TODO 2011-12-07 garcia.wul 如果有文件类似X.gcda.gcda的话，这块会有问题
+        // TODO 2011-12-07 Wu Liang 如果有文件类似X.gcda.gcda的话，这块会有问题
         File gcnoFile = new File(gcdaFile.toString().replace(".gcda", ".gcno"));
         if (!gcnoFile.exists()) {
             logger.warn(String.format(

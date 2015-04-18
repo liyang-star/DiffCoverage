@@ -96,7 +96,7 @@ public class SourceFile implements Serializable {
         int n = getNumLines();
 //        ((ArrayList<Line>)lines).ensureCapacity(n);
         for (int j = 0; j < n ; ++j) {
-            // 2011-12-05 garcia.wul 增加行号
+            // 2011-12-05 Wu Liang 增加行号
             lines.add(new Line(j));
         }
     }

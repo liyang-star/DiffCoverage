@@ -4,7 +4,7 @@ import lombok.Data;
 
 /**
  * 代码行所具有的属性,它是覆盖率信息中的最小单位
- * @author garcia.wul@alibaba-inc.com
+ * @author garcia.relax@gmail.com
  *
  */
 @Data

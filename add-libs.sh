@@ -11,7 +11,7 @@
 #  REQUIREMENTS:  ---
 #          BUGS:  ---
 #         NOTES:  ---
-#        AUTHOR:  Wu Liang (Wu Liang), garcia.wul@alibaba-inc.com
+#        AUTHOR:  Wu Liang (Wu Liang), garcia.relax@gmail.com
 #       COMPANY:  alibaba B2B
 #       VERSION:  1.0
 #       CREATED:  02/28/2012 12:14:51 AM CST

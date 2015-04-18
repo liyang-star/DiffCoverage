@@ -20,7 +20,7 @@ public class Line implements Serializable{
 
     private boolean exists = false;  // 改行是否存在
     private long count = 0;  // 每行的执行次数
-    // 2011-12-05 garcia.wul 增加行号
+    // 2011-12-05 Wu Liang 增加行号
     private int lineNumber = -1;  // 行号
 
     public Line(int lineNumber) {

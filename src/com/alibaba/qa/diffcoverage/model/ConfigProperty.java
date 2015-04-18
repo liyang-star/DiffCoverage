@@ -6,7 +6,7 @@ import lombok.Data;
 
 /**
  * 配置属型
- * @author garcia.wul
+ * @author Wu Liang
  *
  */
 @Data

@@ -2,7 +2,7 @@ package com.alibaba.qa.diffcoverage.model.templates;
 
 /**
  * 结果页面的模板内容
- * @author garcia.wul
+ * @author Wu Liang
  *
  */
 public class ResultTemplate {	

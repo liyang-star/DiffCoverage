@@ -186,7 +186,7 @@ public class DiffCoverage {
             if (fileProperty == null)
                 continue;
             // 如果所有行数都是可以被忽略的
-            // TODO 2012-06-01 garcia.wul 这块貌似有BUG，暂时先注释掉了
+            // TODO 2012-06-01 Wu Liang 这块貌似有BUG，暂时先注释掉了
             if (Collections2.filter(fileProperty.getLines(), new Predicate<LineProperty>(){
 
                 @Override

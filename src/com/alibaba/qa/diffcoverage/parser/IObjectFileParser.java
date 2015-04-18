@@ -3,7 +3,7 @@ package com.alibaba.qa.diffcoverage.parser;
 
 /**
  * 分析C/C++的目标文件的接口
- * @author garcia.wul@alibaba-inc.com
+ * @author garcia.relax@gmail.com
  *
  */
 public interface IObjectFileParser {
