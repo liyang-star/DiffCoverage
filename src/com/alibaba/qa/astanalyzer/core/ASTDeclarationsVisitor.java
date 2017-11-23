@@ -2,6 +2,8 @@ package com.alibaba.qa.astanalyzer.core;
 
 import java.util.List;
 
+#add log
+
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTDeclaration;
 
